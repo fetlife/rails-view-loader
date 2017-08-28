@@ -1,0 +1,30 @@
+language: ruby
+
+rvm:
+  - 2.3.4
+  - 2.4.1
+cache:
+  bundler: true
+  directories:
+    - node_modules
+
+node_js:
+  - 6.11
+  - 7.10
+  - 8.4
+
+before_install:
+  - "grep -i processor /proc/cpuinfo | wc -l"
+  - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
+  - bundle -v
+  - npm install npm -g
+  - npm -v
+
+before_script:
+  - npm install
+
+script:
+  - npm run test
+  - npm run test-webpack-2
+  - npm run test-webpack-3
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

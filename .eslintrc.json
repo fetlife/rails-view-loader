@@ -5,6 +5,5 @@
     "ecmaVersion": 2017
   },
   "rules": {
-    "node/no-unsupported-features": "error"
   }
 }

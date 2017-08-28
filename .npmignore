@@ -1,0 +1,14 @@
+*~
+
+.bundle
+/.editorconfig
+/.eslintrc.json
+/.npmignore
+/.ruby-gemset
+/.ruby-version
+/.travis.yml
+/Gemfile
+/Gemfile.lock
+/coverage
+/test/*
+/yarn.lock

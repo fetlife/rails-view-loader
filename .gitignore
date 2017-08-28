@@ -1,1 +1,5 @@
-node_modules
+.bundle
+/.npmrc
+/yarn.lock
+/coverage
+/node_modules/*
