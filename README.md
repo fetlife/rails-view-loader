@@ -1,16 +1,16 @@
 # rails-view-loader
 
 [![npm
-version](https://img.shields.io/npm/v/rails-view-loader.svg?style=flat-square)](https://www.npmjs.com/package/rails-view-loader)
+version](https://img.shields.io/npm/v/rails-view-loader.svg)](https://www.npmjs.com/package/rails-view-loader)
 [![npm
-downloads](https://img.shields.io/npm/dm/rails-view-loader.svg?style=flat-square)](https://npm-stat.com/charts.html?package=rails-view-loader&from=2017-8-28)
-[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
-[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![Build Status: Linux](https://travis-ci.org/aptx4869/rails-view-loader.svg?branch=master)](https://travis-ci.org/aptx4869/rails-view-loader)
+downloads](https://img.shields.io/npm/dm/rails-view-loader.svg)](https://npm-stat.com/charts.html?package=rails-view-loader&from=2017-8-28)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg)](https://github.com/RichardLitt/standard-readme)
+[![Build Status: Linux](https://img.shields.io/travis/aptx4869/rails-view-loader.svg)](https://travis-ci.org/aptx4869/rails-view-loader)
 [![Coverage Status](https://coveralls.io/repos/github/aptx4869/rails-view-loader/badge.svg?branch=master)](https://coveralls.io/github/aptx4869/rails-view-loader?branch=master)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-> View (`.html.slim` , `.html.erb`, `.html.haml`) `webpack` loader for Rails projects.
+> Rails view files (`.html.slim` , `.html.erb`, `.html.haml`) `webpack` loader.
 
 Transform Rails view template files to html.
 Files are render using `ApplicationController.render`

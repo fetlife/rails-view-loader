@@ -12,23 +12,25 @@ const compile = (config, callback) => {
   config.runnerOptions = config.runnerOptions || { cwd: path.join(__dirname) }
   const extension = config.extension
   const entry = config.entry || `./test/app/views/${extension}/${config.file}.${extension}`
+  const loader = {
+    loader: './index',
+    options: {
+      runner: config.runner,
+      runnerOptions: config.runnerOptions,
+      dependenciesRoot: './test/app'
+    }
+  }
   const compiler = webpack({
     entry,
     module: {
       loaders: [
         {
-          test: /\.(erb|slim|haml)$/,
-          use: [
-            'html-loader',
-            {
-              loader: './index',
-              options: {
-                runner: config.runner,
-                runnerOptions: config.runnerOptions,
-                dependenciesRoot: './test/app'
-              }
-            }
-          ]
+          test: /\.js\.(erb|slim|haml)$/,
+          use: [loader]
+        },
+        {
+          test: /\.html\.(erb|slim|haml)$/,
+          use: [ 'html-loader', loader ]
         }
       ]
     },
@@ -67,6 +69,14 @@ const expectInOutput = (str) => {
       compile2({ file: 'simple.html', extension }, done, ({ compilation }) => {
         expect(compilation.errors).toEqual([])
         expectInOutput(/<div class=\\?["']helloWorld\\?["']>Hello World<\/div>/)
+        done()
+      })
+    })
+
+    test('uses asset_path helper', (done) => {
+      compile2({ file: 'asset_path.js', extension }, done, ({ compilation: { errors } }) => {
+        expect(errors).toEqual([])
+        expectInOutput(/var path = '\/default.png'/)
         done()
       })
     })
