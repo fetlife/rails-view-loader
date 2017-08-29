@@ -7,7 +7,6 @@ const webpack = require('webpack')
 const fs = new MemoryFS()
 const compile = (config, callback) => {
   config.runner = config.runner || 'bin/rails runner'
-  config.variant = config.variant
   config.layout = config.layout
   config.runnerOptions = config.runnerOptions || { cwd: path.join(__dirname) }
   const extension = config.extension
@@ -16,6 +15,7 @@ const compile = (config, callback) => {
     loader: './index',
     options: {
       runner: config.runner,
+      variant: config.variant,
       runnerOptions: config.runnerOptions,
       dependenciesRoot: './test/app'
     }
@@ -78,6 +78,24 @@ const expectInOutput = (str) => {
         expect(errors).toEqual([])
         expectInOutput(/var path = '\/default.png'/)
         done()
+      })
+    })
+
+    describe(`with Action Pack Variant`, () => {
+      test('render default', (done) => {
+        compile2({ file: 'variant.html', extension }, done, ({ compilation: { errors } }) => {
+          expect(errors).toEqual([])
+          expectInOutput(/<div>default variant<\/div>/)
+          done()
+        })
+      })
+
+      test('render desktop', (done) => {
+        compile2({ file: 'variant.html', extension, variant: 'desktop' }, done, ({ compilation: { errors } }) => {
+          expect(errors).toEqual([])
+          expectInOutput(/<div>desktop<\/div>/)
+          done()
+        })
       })
     })
 
