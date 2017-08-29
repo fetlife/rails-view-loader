@@ -1,7 +1,7 @@
 {
   "name": "rails-view-loader",
   "version": "1.0.0",
-  "description": "Rails view (`.html.slim` , `.html.erb`) `webpack` loader for Ruby projects.",
+  "description": "Rails view files (`.html.slim` , `.html.erb`, `.html.haml`) `webpack` loader.",
   "main": "index.js",
   "engines": {
     "node": ">=0.10.0"

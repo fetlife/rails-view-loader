@@ -1,19 +1,17 @@
 # rails-view-loader
 
-[![npm
-version](https://img.shields.io/npm/v/rails-view-loader.svg)](https://www.npmjs.com/package/rails-view-loader)
-[![npm
-downloads](https://img.shields.io/npm/dm/rails-view-loader.svg)](https://npm-stat.com/charts.html?package=rails-view-loader&from=2017-8-28)
+[![npm version](https://img.shields.io/npm/v/rails-view-loader.svg)](https://www.npmjs.com/package/rails-view-loader)
+[![npm downloads](https://img.shields.io/npm/dm/rails-view-loader.svg)](https://npm-stat.com/charts.html?package=rails-view-loader&from=2017-8-28)
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg)](https://github.com/RichardLitt/standard-readme)
 [![Build Status: Linux](https://img.shields.io/travis/aptx4869/rails-view-loader.svg)](https://travis-ci.org/aptx4869/rails-view-loader)
-[![Coverage Status](https://coveralls.io/repos/github/aptx4869/rails-view-loader/badge.svg?branch=master)](https://coveralls.io/github/aptx4869/rails-view-loader?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/aptx4869/rails-view-loader.svg)](https://coveralls.io/github/aptx4869/rails-view-loader)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
 > Rails view files (`.html.slim` , `.html.erb`, `.html.haml`) `webpack` loader.
 
 Transform Rails view template files to html.
-Files are render using `ApplicationController.render`
+Files are render using [`ApplicationController.render`](https://github.com/aptx4869/rails-view-loader/blob/master/lib/view_render.rb)
 
 ## Table of Contents
 
@@ -23,7 +21,6 @@ Files are render using `ApplicationController.render`
   - [Options](#options)
   - [Dependencies](#dependencies)
   - [ActionPack Variants](#actionpack-variants)
-  - [Layout](#layout)
 - [Contribute](#contribute)
 - [License](#license)
 
@@ -43,44 +40,54 @@ yarn add -D rails-view-loader
 
 ## Usage
 
-Add `rails-view-loader` to your rules.
+Add `rails-view-loader` with your favourite html loaders (`html-loader`, `vue-html-loader`, etc) to your rules.
 
 ```js
 // webpack.config.js
 
 module.exports = {
-    module: {
-      rules: [
-        {
-          test: /\.html\.(erb|slim|haml)$/,
-          enforce: 'pre',
-          loader: 'rails-view-loader'
-        },
-      ]
-    }
+  resolve: {
+    modules: [ resolve('app/views'), ... ],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.html\.(erb|slim|haml)$/,
+        use: [
+          'html-loader',
+          {
+            loader: 'rails-view-loader',
+          }
+        ]
+      },
+    ]
   }
 };
 ```
 
 Now you can import your view files in your project, for example:
 
-`app/view/registration/new.html.erb`
+`app/view/session/new.html.erb`
 
 ```erb
 <%# /* rails-view-loader-dependencies models/user */ %>
-<h2>Sign up</h2>
+<h2>Login</h2>
 
-<%= angular_form_for(User.new, url: registration_path(:user)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
-    <%= f.input :password, required: true %>
-    <%= f.input :password_confirmation, required: true %>
-  </div>
+<%= angular_form_for(User.new, url: login_path(:user)) do |f| %>
+  <%= f.input :login, required: true, autofocus: true %>
+  <%= f.input :password, required: true %>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
+  <%= f.button :submit, "Login" %>
 <% end %>
+```
+
+```js
+import { Component } from '@angular/core'
+import template from 'session/new.html.erb'
+
+@Component({ selector: 'login', template: template })
+export class LoginComponent {
+}
 ```
 
 ## Configuration
@@ -89,12 +96,12 @@ Now you can import your view files in your project, for example:
 
 Can be configured with [UseEntry#options](https://webpack.js.org/configuration/module/#useentry).
 
-| Option | Type | Default | Description |
-| ------ |----- | ------- | ----------- |
-| `dependenciesRoot` | `String` | `"app"` | The root of your Rails project, relative to webpack's working directory. |
-| `runner` | `String` |  `"./bin/rails runner"` | Command to run Ruby scripts, relative to webpack's working directory. |
-| `runnerOptions` | `Object` | `{}` | Command to run Ruby scripts, relative to webpack's working directory. |
-| `variant` | `String` | `null` | ActionPack Variants |
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `dependenciesRoot` | `"app"` | The root of your Rails project, relative to webpack's working directory. |
+| `runner` | `"./bin/rails runner"` | Command to run Ruby scripts, relative to webpack's working directory. |
+| `runnerOptions` | `{}` | [options](http://bit.ly/2wEBQnh) for child_process.execFile to call runner |
+| `variant` | `null` | ActionPack Variants |
 
 For example, if your webpack process is running in a subdirectory of your Rails project:
 
@@ -110,7 +117,7 @@ For example, if your webpack process is running in a subdirectory of your Rails 
 
 ### Dependencies
 
-If your view files depend on files in your Ruby project, you can list them explicitly.
+If your view files depend on files in your Rails project, you can list them explicitly.
 Inclusion of the `rails-view-loader-dependency` (or `-dependencies`) comment
 wrapped in `/* */` will tell webpack to watch these files -
 causing webpack-dev-server to rebuild when they are changed.
@@ -133,11 +140,31 @@ To watch all files in a directory, end the path in a `/`.
 
 ### ActionPack Variants
 
+You can set the [Action Pack Variants](http://guides.rubyonrails.org/4_1_release_notes.html#action-pack-variants) and layout with global config:
+
+```js
+{
+  loader: 'rails-view-loader',
+  options: {
+    runner: '../bin/rails runner',
+    dependenciesRoot: '../app',
+    variant: 'desktop',
+    layout: 'some-layout',
+  }
+}
+```
+
+or with query string:
+
+```js
+import template from 'registration/new.html.erb?variant=desktop&layout=some-layout'
+```
+
 ActionPack Variants
 
 ## Contribute
 
-Questions, bug reports and pull requests welcome. See [GitHub issues](https://github.com/usabilityhub/rails-view-loader/issues).
+Questions, bug reports and pull requests welcome. See [GitHub issues](https://github.com/aptx4869/rails-view-loader/issues).
 
 ## License
 
