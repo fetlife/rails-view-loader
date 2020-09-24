@@ -33,7 +33,7 @@ module.exports = function railsViewLoader (source, map) {
     if (error) {
       callback(error)
     } else {
-      runner(loader, config, map, callback)
+      runner(source, loader, config, map, callback)
     }
   })
 }

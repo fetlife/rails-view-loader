@@ -1,20 +1,29 @@
-# encoding:utf-8
 # frozen_string_literal: true
 
-options   = JSON.parse STDIN.read
+if !$VIEW_PATH_MODIFIED
+  ApplicationController.append_view_path(ENV['TMPDIR'])
+  $VIEW_PATH_MODIFIED = true
+end
+
+options   = JSON.parse(STDIN.read)
 delimiter = options['delimiter']
 resource  = options['resource']
 layout    = options['layout']
 variant   = options['variant']
+source    = options['source']
 
-url   = URI.parse resource
+url   = URI.parse(resource)
 query = URI.decode_www_form(url.query.to_s).to_h
 
-file = url.path
+lang = query['lang'] || url.path.split('.')[1..-1].join('.')
 
-file    = file.remove(File.extname(file))
+tmp_file = Tempfile.new(["tmp_view", lang])
+tmp_file.write(source)
+tmp_file.flush
+
 layout  ||= query['layout'] || false
 variant ||= query['variant']
 
-output = ApplicationController.render(file: file, layout: layout, variant: variant)
+output = ApplicationController.render(file: File.basename(tmp_file.path), layout: layout, variant: variant)
+tmp_file.unlink
 puts "#{delimiter}#{output}#{delimiter}"
