@@ -7,6 +7,13 @@ ApplicationController.append_view_path(Dir.tmpdir)
 class RailsViewLoaderServer < Sinatra::Base
   configure :production, :development do
     enable :logging
+    set(:show_exceptions, false)
+  end
+
+  error do
+    content_type :json
+    e = env['sinatra.error']
+    {:result => 'error', :message => e.message}.to_json
   end
 
   post '/' do
