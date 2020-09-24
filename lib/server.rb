@@ -12,7 +12,6 @@ class RailsViewLoaderServer < Sinatra::Base
   post '/' do
     request.body.rewind  # in case someone already read it
     options = JSON.parse(request.body.read)
-    delimiter = options['delimiter']
     resource  = options['resource']
     layout    = options['layout']
     variant   = options['variant']
