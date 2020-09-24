@@ -4,6 +4,7 @@ const defaults = require('lodash.defaults')
 const parseDependencies = require('./lib/parse_dependencies')
 const addDependencies = require('./lib/add_dependencies')
 const runner = require('./lib/runner')
+const server = require('./lib/server')
 
 module.exports = function railsViewLoader (source, map) {
   const loader = this
@@ -16,9 +17,12 @@ module.exports = function railsViewLoader (source, map) {
   // Modifying the return value of `getOptions` is not permitted.
   const config = defaults({}, getOptions(loader), {
     dependenciesRoot: 'app',
-    runner: './bin/rails runner',
-    runnerOptions: {}
+    runner: './bin/rails',
+    port: 4567,
+    host: "127.0.0.1"
   })
+  server(config, (error) => { console.error("Error running server", error) })
+
 
   // Dependencies are only useful in development, so don't bother searching the
   // file for them otherwise.

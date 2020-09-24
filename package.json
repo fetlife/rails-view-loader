@@ -1,6 +1,6 @@
 {
   "name": "rails-view-loader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Rails view files (`.html.slim` , `.html.erb`, `.html.haml`) `webpack` loader.",
   "main": "index.js",
   "engines": {
@@ -52,6 +52,7 @@
     "verbose": true
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "loader-utils": "^1.1.0",
     "lodash.defaults": "^4.2.0",
     "retry": "^0.10.1"
