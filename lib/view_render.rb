@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+require 'tmpdir'
 
 if !$VIEW_PATH_MODIFIED
-  ApplicationController.append_view_path(ENV['TMPDIR'])
+  ApplicationController.append_view_path(Dir.tmpdir)
   $VIEW_PATH_MODIFIED = true
 end
 
