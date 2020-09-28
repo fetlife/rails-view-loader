@@ -21,7 +21,7 @@ module.exports = function railsViewLoader (source, map) {
     port: 4567,
     host: "127.0.0.1"
   })
-  server(config, (error) => { console.error("Error running server", error) })
+  server(loader, config, (error) => { loader.emitError(`Error running server ${error}`) })
 
 
   // Dependencies are only useful in development, so don't bother searching the
@@ -37,7 +37,7 @@ module.exports = function railsViewLoader (source, map) {
     if (error) {
       callback(error)
     } else {
-      runner(source, loader, config, map, callback)
+      runner(loader, source, config, map, callback)
     }
   })
 }
