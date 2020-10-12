@@ -29,17 +29,11 @@ class RailsViewLoaderServer < Sinatra::Base
 
     lang = query['lang'] || url.path.split('.')[1..-1].join('.')
 
-    tmp_file = Tempfile.new(["tmp_view", ".#{lang}"])
-    tmp_file.write(source)
-    tmp_file.flush
-
     layout  ||= query['layout'] || false
     variant ||= query['variant']
 
-    output = ApplicationController.render(template: File.basename(tmp_file.path), layout: layout, variant: variant)
+    output = ApplicationController.render(inline: source, type: lang, layout: layout, variant: variant)
     output
-  ensure
-    tmp_file.unlink
   end
 end
 
