@@ -18,6 +18,7 @@ module.exports = function railsViewLoader (source, map) {
   const config = defaults({}, getOptions(loader), {
     dependenciesRoot: 'app',
     runner: './bin/rails',
+    runnerArgs: ['runner'],
     port: 4567,
     host: "127.0.0.1"
   })
