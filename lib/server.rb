@@ -1,12 +1,9 @@
 require 'rack/handler/puma'
-require 'tmpdir'
 
-class RailsViewTemplateRendering < ActionController::Metal
-  include AbstractController::Rendering
-  include ActionView::Layouts
+class RailsViewTemplateRendering < ActionController::Base
+  skip_before_action :verify_authenticity_token
 
   def index
-    append_view_path(Dir.tmpdir)
     resource  = params['resource']
     layout    = params['layout']
     variant   = params['variant']
